@@ -51,7 +51,7 @@ public class BoardActivity extends AppCompatActivity {
     ArrayList<int[]> quad;
     ArrayList<int[]> ele;
     ArrayList<int[]> casa;
-    ArrayList<ArrayList> pieces;
+    ArrayList<Piece> pecasFundo = new ArrayList<>();
 
 
     @Override
@@ -61,7 +61,7 @@ public class BoardActivity extends AppCompatActivity {
         pontos = (TextView) findViewById(R.id.pontos);
         imgv = (ImageView) findViewById(R.id.imageView);
 
-        pieces = new ArrayList<>();
+        //pieces = new ArrayList<>();
         preencherMatriz();
 
         //Tabuleiro
@@ -116,10 +116,10 @@ public class BoardActivity extends AppCompatActivity {
                 Log.i("Botao", "Botão eaquerdo");
 
                 if (numeroDaPeca == 0) {
-//                    references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 0;
-//                    references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 0;
-                    references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 0;
-                    references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 0;
+                    //references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 0;
+                    //references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 0;
+                    //references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 0;
+                    //references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 0;
 
                     peca.getPoints().get(0)[1] -= 1;
                     peca.getPoints().get(1)[1] -= 1;
@@ -165,13 +165,36 @@ public class BoardActivity extends AppCompatActivity {
                             //For que percorre a matriz de referência e preenche como deve ser preenchida
                             for (int i = 0; i < n1; i++) {
                                 for (int j = 0; j < n2; j++) {
-                                    if (references[i][j] == 1) {
+                                    /*if (references[i][j] == 1) {
                                         board[i][j].setImageResource(R.drawable.green);
-                                    } else if (references[i][j] == 0) {
-                                        board[i][j].setImageResource(R.drawable.black);
+                                    } else if (references[i][j] == 0) {*/
+                                    board[i][j].setImageResource(R.drawable.black);
+
+                                    if (i == 0) {
+                                        board[i][j].setImageResource(R.drawable.gray);
+                                        references[i][j] = 99;
+                                    } else if (i == n1 - 1) {
+                                        board[i][j].setImageResource(R.drawable.gray);
+                                        references[i][j] = 99;
+                                    } else if (j == 0) {
+                                        board[i][j].setImageResource(R.drawable.gray);
+                                        references[i][j] = 99;
+                                    } else if (j == n2 - 1) {
+                                        board[i][j].setImageResource(R.drawable.gray);
+                                        references[i][j] = 99;
                                     }
+                                    // }
                                 }
                             }
+
+                            for (Piece p: pecasFundo) {
+                                Log.i("TANIRO2", "x = "+ p.getPoints().get(0)[0]+ " y = "+ p.getPoints().get(0)[1] + " size: " + pecasFundo.size());
+                                for(int i = 0; i < p.getPoints().size(); i++){
+                                    board[p.getPoints().get(i)[0]][p.getPoints().get(i)[1]].setImageResource(R.drawable.green);
+                                }
+                            }
+
+
 
                             //Se for a primeira vez que estiver rodando
                             if (cont == 1) {
@@ -214,10 +237,21 @@ public class BoardActivity extends AppCompatActivity {
                                         references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 1;
                                         references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 1;
 
-                                        peca.getPoints().get(0)[0] += 1;
-                                        peca.getPoints().get(1)[0] += 1;
-                                        peca.getPoints().get(2)[0] += 1;
-                                        peca.getPoints().get(3)[0] += 1;
+                                        Log.i("TANIRO", " q isso "+(peca.getPoints().get(0)[0]+1));
+                                        if ((peca.getPoints().get(0)[0]+1) >= n1-2){
+                                            Log.i("TANIRO", "add");
+                                            pecasFundo.add(peca);
+                                            //adicionar os pontos da peça na matriz de referencias.
+                                            cont = 0;
+
+                                        }else {
+                                            peca.getPoints().get(0)[0] += 1;
+                                            peca.getPoints().get(1)[0] += 1;
+                                            peca.getPoints().get(2)[0] += 1;
+                                            peca.getPoints().get(3)[0] += 1;
+                                        }
+
+
 
                                         references[peca.getPoints().get(0)[0]-2][peca.getPoints().get(0)[1]] = 0;
                                         references[peca.getPoints().get(0)[0]-2][peca.getPoints().get(1)[1]] = 0;
@@ -227,6 +261,12 @@ public class BoardActivity extends AppCompatActivity {
                                 }
 
                             }
+
+                            for(int i = 0; i < peca.getPoints().size(); i++ ){
+                                board[peca.getPoints().get(i)[0]][peca.getPoints().get(i)[1]].setImageResource(R.drawable.green);
+                            }
+
+
 
                             cont++;
 
@@ -248,7 +288,7 @@ public class BoardActivity extends AppCompatActivity {
         Random r = new Random();
         int numberRandom = r.nextInt(1);
         Log.i("random", "Número random: " + numberRandom);
-        return numberRandom;
+        return 1;
     }
 
     public void limparMatriz() {
