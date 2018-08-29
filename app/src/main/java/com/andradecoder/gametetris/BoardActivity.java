@@ -36,6 +36,7 @@ public class BoardActivity extends AppCompatActivity {
 
     Handler handler = new Handler();
     Boolean running = true;
+    Boolean find = false;
     TextView pontos;
     ImageView imgv;
     Context c = this;
@@ -43,14 +44,7 @@ public class BoardActivity extends AppCompatActivity {
     Piece peca;
     int numeroDaPeca;
     int cont = 1;
-    int cordX = 0;
-    int cordY = 0;
 
-    //Peças
-
-    ArrayList<int[]> quad;
-    ArrayList<int[]> ele;
-    ArrayList<int[]> casa;
     ArrayList<Piece> pecasFundo = new ArrayList<>();
 
 
@@ -60,9 +54,6 @@ public class BoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_board);
         pontos = (TextView) findViewById(R.id.pontos);
         imgv = (ImageView) findViewById(R.id.imageView);
-
-        //pieces = new ArrayList<>();
-        preencherMatriz();
 
         //Tabuleiro
         //Criando uma matriz de imagens (ImageView)
@@ -82,30 +73,20 @@ public class BoardActivity extends AppCompatActivity {
             for (int y = 0; y < layout.getColumnCount(); y++) {
                 //O tabuleiro na posição X,Y recebe uma ImageView inflado.
                 board[x][y] = (ImageView) inflater.inflate(R.layout.inflate_image_view, layout, false);
-
                 if (x == 0) {
                     board[x][y].setImageResource(R.drawable.gray);
-                    references[x][y] = 99;
                 } else if (x == n1 - 1) {
                     board[x][y].setImageResource(R.drawable.gray);
-                    references[x][y] = 99;
                 } else if (y == 0) {
                     board[x][y].setImageResource(R.drawable.gray);
-                    references[x][y] = 99;
                 } else if (y == n2 - 1) {
                     board[x][y].setImageResource(R.drawable.gray);
-                    references[x][y] = 99;
                 }
                 //Adicionando ao Grid Layout o conteúdo no tabuleiro de imagens na posição X,Y.
                 layout.addView(board[x][y]);
             }
         }
 
-        Log.i("deb", "Tamanho de linhas: " + layout.getRowCount());
-        Log.i("deb", "Tamanho de colunas: " + layout.getColumnCount());
-        Log.i("imagem", "Tamanho de colunas: " + layout.getColumnCount());
-
-        //Log.i("deb", "Tamanho de colunas: " + layout.getColumnCount());
         piece();
 
         //Implementação dos botões
@@ -116,30 +97,33 @@ public class BoardActivity extends AppCompatActivity {
                 Log.i("Botao", "Botão eaquerdo");
 
                 if (numeroDaPeca == 0) {
-                    //references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 0;
-                    //references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 0;
-                    //references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 0;
-                    //references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 0;
 
-                    peca.getPoints().get(0)[1] -= 1;
-                    peca.getPoints().get(1)[1] -= 1;
-                    peca.getPoints().get(2)[1] -= 1;
-                    peca.getPoints().get(3)[1] -= 1;
+                    peca.left();
 
                 } else if (numeroDaPeca == 1) {
 
-                    references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 0;
-                    references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 0;
-//                    references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 0;
-//                    references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 0;
-
-                    peca.getPoints().get(0)[1] -= 1;
-                    peca.getPoints().get(1)[1] -= 1;
-                    peca.getPoints().get(2)[1] -= 1;
-                    peca.getPoints().get(3)[1] -= 1;
+                    peca.left();
 
                 } else if (numeroDaPeca == 2) {
-                    //peca = new Casa();
+                    peca.left();
+                }
+            }
+        });
+
+        ImageButton buttonRight = findViewById(R.id.buttonRight);
+        buttonRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (numeroDaPeca == 0) {
+
+                    peca.right();
+
+                } else if (numeroDaPeca == 1) {
+
+                    peca.right();
+
+                } else if (numeroDaPeca == 2) {
+                    peca.right();
                 }
             }
         });
@@ -154,7 +138,7 @@ public class BoardActivity extends AppCompatActivity {
 
                 while (running) {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -162,38 +146,24 @@ public class BoardActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            //For que percorre a matriz de referência e preenche como deve ser preenchida
-                            for (int i = 0; i < n1; i++) {
-                                for (int j = 0; j < n2; j++) {
-                                    /*if (references[i][j] == 1) {
-                                        board[i][j].setImageResource(R.drawable.green);
-                                    } else if (references[i][j] == 0) {*/
-                                    board[i][j].setImageResource(R.drawable.black);
+                            //Início da Thread
+                            //For's que limpam a matriz de ImageView
+                            //LIMPAR
+                            limparMatriz();
 
-                                    if (i == 0) {
-                                        board[i][j].setImageResource(R.drawable.gray);
-                                        references[i][j] = 99;
-                                    } else if (i == n1 - 1) {
-                                        board[i][j].setImageResource(R.drawable.gray);
-                                        references[i][j] = 99;
-                                    } else if (j == 0) {
-                                        board[i][j].setImageResource(R.drawable.gray);
-                                        references[i][j] = 99;
-                                    } else if (j == n2 - 1) {
-                                        board[i][j].setImageResource(R.drawable.gray);
-                                        references[i][j] = 99;
-                                    }
-                                    // }
-                                }
-                            }
 
-                            for (Piece p: pecasFundo) {
-                                Log.i("TANIRO2", "x = "+ p.getPoints().get(0)[0]+ " y = "+ p.getPoints().get(0)[1] + " size: " + pecasFundo.size());
-                                for(int i = 0; i < p.getPoints().size(); i++){
+                            //PINTAR
+                            //For que percorre todas as peças já criadas e "pinta" o tabuleiro(ImageView).
+                            for (Piece p : pecasFundo) {
+                                //Log.i("TANIRO2", "x = "+ p.getPoints().get(0)[0]+ " y = "+ p.getPoints().get(0)[1] + " size: " + pecasFundo.size());
+                                //Log.i("andrade","Tamanho:"+ p.getPoints().size());
+                                //Para cada peça eu tenho um array de vetores
+                                //For que percorre esse array para cada peça já salva
+                                for (int i = 0; i < p.getPoints().size(); i++) {
+                                    //Pega a posição X e Y de cada peça e coloca no na matriz de Image View
                                     board[p.getPoints().get(i)[0]][p.getPoints().get(i)[1]].setImageResource(R.drawable.green);
                                 }
                             }
-
 
 
                             //Se for a primeira vez que estiver rodando
@@ -211,65 +181,39 @@ public class BoardActivity extends AppCompatActivity {
 
                                 Log.i("random", "Cont um");
                             } else {
+
+                                //existPiece();
+                                //Se a próxima posição for maior que a borda
                                 if (((peca.getPoints().get(0)[0] + 1) >= n1) ||
                                         ((peca.getPoints().get(1)[0] + 1) >= n1) ||
                                         ((peca.getPoints().get(2)[0] + 1) >= n1) ||
-                                        ((peca.getPoints().get(3)[0] + 1) >= n1)) {
+                                        ((peca.getPoints().get(3)[0] + 1) >= n1) || existPiece()) {
 
+                                    Log.i("andrade", "Tamanho das peças que estão no fundo: " + pecasFundo.size());
+                                    pecasFundo.add(peca);
                                     cont = 0;
-                                }else{
-                                    if(peca instanceof Linha){
-                                        references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 1;
-                                        references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 1;
-                                        references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 1;
-                                        references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 1;
+                                } else {
 
-                                        peca.getPoints().get(0)[0] += 1;
-                                        peca.getPoints().get(1)[0] += 1;
-                                        peca.getPoints().get(2)[0] += 1;
-                                        peca.getPoints().get(3)[0] += 1;
-
-                                        references[peca.getPoints().get(0)[0]-1][peca.getPoints().get(0)[1]] = 0;
-                                    }else if(peca instanceof Quadrado){
-
-                                        references[peca.getPoints().get(0)[0]][peca.getPoints().get(0)[1]] = 1;
-                                        references[peca.getPoints().get(1)[0]][peca.getPoints().get(1)[1]] = 1;
-                                        references[peca.getPoints().get(2)[0]][peca.getPoints().get(2)[1]] = 1;
-                                        references[peca.getPoints().get(3)[0]][peca.getPoints().get(3)[1]] = 1;
-
-                                        Log.i("TANIRO", " q isso "+(peca.getPoints().get(0)[0]+1));
-                                        if ((peca.getPoints().get(0)[0]+1) >= n1-2){
-                                            Log.i("TANIRO", "add");
-                                            pecasFundo.add(peca);
-                                            //adicionar os pontos da peça na matriz de referencias.
-                                            cont = 0;
-
-                                        }else {
-                                            peca.getPoints().get(0)[0] += 1;
-                                            peca.getPoints().get(1)[0] += 1;
-                                            peca.getPoints().get(2)[0] += 1;
-                                            peca.getPoints().get(3)[0] += 1;
-                                        }
-
-
-
-                                        references[peca.getPoints().get(0)[0]-2][peca.getPoints().get(0)[1]] = 0;
-                                        references[peca.getPoints().get(0)[0]-2][peca.getPoints().get(1)[1]] = 0;
-                                        references[peca.getPoints().get(1)[0]-2][peca.getPoints().get(0)[1]] = 0;
-                                        references[peca.getPoints().get(1)[1]-2][peca.getPoints().get(1)[1]] = 0;
+                                    // (!find) {
+                                    if (peca instanceof Linha) {
+                                        edge();
+                                    } else if (peca instanceof Quadrado) {
+                                        edge();
+                                    } else if (peca instanceof Casa) {
+                                        edge();
                                     }
+                                    // }
+
                                 }
 
                             }
 
-                            for(int i = 0; i < peca.getPoints().size(); i++ ){
+                            //Além de pintar o fundo eu precido pintar o movimento da peça;
+                            //Quando ela chegar no fundo, é adicionada ao Array de peças do fundo
+                            for (int i = 0; i < peca.getPoints().size(); i++) {
                                 board[peca.getPoints().get(i)[0]][peca.getPoints().get(i)[1]].setImageResource(R.drawable.green);
                             }
-
-
-
                             cont++;
-
                         }
                     });
                 }
@@ -278,32 +222,75 @@ public class BoardActivity extends AppCompatActivity {
 
     }
 
-    public void createPiece() {
-
-    }
-
-
     public int createRandom() {
         //Criando número random
         Random r = new Random();
-        int numberRandom = r.nextInt(1);
+        int numberRandom = r.nextInt(3);
         Log.i("random", "Número random: " + numberRandom);
-        return 1;
+        return numberRandom;
     }
+
 
     public void limparMatriz() {
-
-    }
-
-
-    //Método para preencher a matriz
-    public void preencherMatriz() {
-        references = new int[n1][n2];
         for (int i = 0; i < n1; i++) {
             for (int j = 0; j < n2; j++) {
-                references[i][j] = 0;
+                board[i][j].setImageResource(R.drawable.black);
+                if (i == 0) {
+                    board[i][j].setImageResource(R.drawable.gray);
+                } else if (i == n1 - 1) {
+                    board[i][j].setImageResource(R.drawable.gray);
+                } else if (j == 0) {
+                    board[i][j].setImageResource(R.drawable.gray);
+                } else if (j == n2 - 1) {
+                    board[i][j].setImageResource(R.drawable.gray);
+                }
+                // }
             }
         }
+    }
+
+    public void edge() {
+        if ((peca.getPoints().get(3)[0]) >= n1 - 2) {
+            pecasFundo.add(peca);
+            cont = 0;
+        } else {
+            peca.move();
+        }
+
+//        Log.i("TANIRO", " q isso " + (peca.getPoints().get(0)[0] + 1));
+//        if ((peca.getPoints().get(3)[0]) >= n1 - 2) {
+//            Log.i("TANIRO", "add");
+//            pecasFundo.add(peca);
+//            //adicionar os pontos da peça na matriz de referencias.
+//            cont = 0;
+//
+//        } else {
+//            peca.move();
+//        }
+    }
+
+    public Boolean existPiece() {
+        for (Piece p : pecasFundo) {
+            for (int x = 0; x < p.getPoints().size(); x++) {
+                //2-0
+                //2-1
+                //Acredito que esse seja para o quadrado
+                //Fazer Ifzão antes para verificar qual é a peça do momemento e fazer as devidas comparações
+                if ((((peca.getPoints().get(2)[0] + 2) == p.getPoints().get(2)[0]) &&
+                        (peca.getPoints().get(2)[1]) == p.getPoints().get(2)[1]) || ((
+                        peca.getPoints().get(3)[0] + 2) == p.getPoints().get(0)[0] &&
+                        peca.getPoints().get(3)[0] == p.getPoints().get(3)[0])
+                        ){
+                    Log.i("encontrou", "Encontrou uma peça");
+                    //pecasFundo.add(peca);
+                    //find = true;
+                    //cont = 0;
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 
     @Override

@@ -41,15 +41,12 @@ public class Quadrado extends Piece {
 
     }
 
-    @Override
-    public void left(){
-        /*
-        points.get(0)[0] -= 1;
-        points.get(1)[1] -= 1;
+//    public void move(){
+//        points.get(0)[0] += 1;
+//        points.get(1)[0] += 1;
+//        points.get(2)[0] += 1;
+//        points.get(3)[0] += 1;
+//    }
 
-        points.get(3)[0] -= 1;
-        points.get(3)[1] -= 1;
-        */
-    }
 
 }
