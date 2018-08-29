@@ -30,10 +30,10 @@ public class Quadrado extends Piece {
         points.get(1)[1] = 11;
 
         points.get(2)[0] = 4;
-        points.get(2)[1] = 10;
+        points.get(2)[1] = 11;
 
         points.get(3)[0] = 4;
-        points.get(3)[1] = 11;
+        points.get(3)[1] = 10;
     }
 
     @Override

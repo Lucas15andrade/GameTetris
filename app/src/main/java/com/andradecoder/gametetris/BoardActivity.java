@@ -1,6 +1,7 @@
 package com.andradecoder.gametetris;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +45,7 @@ public class BoardActivity extends AppCompatActivity {
     Piece peca;
     int numeroDaPeca;
     int cont = 1;
+    int valorThread;
 
     ArrayList<Piece> pecasFundo = new ArrayList<>();
 
@@ -52,6 +54,22 @@ public class BoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_board);
+
+        SharedPreferences config = getSharedPreferences("config", MODE_PRIVATE);
+        int valorDificuldade = config.getInt("dificuldade", 2);
+        int valorPecas = config.getInt("numeroPecas", 4);
+
+        if(valorDificuldade == 1){
+            valorThread = 300;
+        }else if(valorDificuldade == 2){
+            valorThread = 150;
+        }else if(valorDificuldade == 3){
+            valorThread = 100;
+        }
+
+        Log.i("dificuldade",""+valorThread);
+        Log.i("pecas",""+valorPecas);
+
         pontos = (TextView) findViewById(R.id.pontos);
         imgv = (ImageView) findViewById(R.id.imageView);
 
@@ -138,7 +156,7 @@ public class BoardActivity extends AppCompatActivity {
 
                 while (running) {
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(valorThread);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -189,7 +207,7 @@ public class BoardActivity extends AppCompatActivity {
                                         ((peca.getPoints().get(2)[0] + 1) >= n1) ||
                                         ((peca.getPoints().get(3)[0] + 1) >= n1) || existPiece()) {
 
-                                    Log.i("andrade", "Tamanho das peças que estão no fundo: " + pecasFundo.size());
+                                    Log.i("andrade2", "Tamanho das peças que estão no fundo: " + pecasFundo.size());
                                     pecasFundo.add(peca);
                                     cont = 0;
                                 } else {
@@ -208,7 +226,7 @@ public class BoardActivity extends AppCompatActivity {
 
                             }
 
-                            //Além de pintar o fundo eu precido pintar o movimento da peça;
+                            //Além de pintar o fundo eu preciso pintar o movimento da peça;
                             //Quando ela chegar no fundo, é adicionada ao Array de peças do fundo
                             for (int i = 0; i < peca.getPoints().size(); i++) {
                                 board[peca.getPoints().get(i)[0]][peca.getPoints().get(i)[1]].setImageResource(R.drawable.green);
@@ -225,6 +243,7 @@ public class BoardActivity extends AppCompatActivity {
     public int createRandom() {
         //Criando número random
         Random r = new Random();
+        //Passar o valorPeças depois
         int numberRandom = r.nextInt(3);
         Log.i("random", "Número random: " + numberRandom);
         return numberRandom;
@@ -250,7 +269,10 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     public void edge() {
-        if ((peca.getPoints().get(3)[0]) >= n1 - 2) {
+        if ((peca.getPoints().get(3)[0]) >= n1 - 2 ||
+                peca.getPoints().get(3)[1] >= n1 - 2 /*||
+                peca.getPoints().get(2)[0] >= n1 -2 ||
+                peca.getPoints().get(2)[1] >= n1 -2 */) {
             pecasFundo.add(peca);
             cont = 0;
         } else {
@@ -276,17 +298,23 @@ public class BoardActivity extends AppCompatActivity {
                 //2-1
                 //Acredito que esse seja para o quadrado
                 //Fazer Ifzão antes para verificar qual é a peça do momemento e fazer as devidas comparações
-                if ((((peca.getPoints().get(2)[0] + 2) == p.getPoints().get(2)[0]) &&
-                        (peca.getPoints().get(2)[1]) == p.getPoints().get(2)[1]) || ((
-                        peca.getPoints().get(3)[0] + 2) == p.getPoints().get(0)[0] &&
-                        peca.getPoints().get(3)[0] == p.getPoints().get(3)[0])
-                        ){
-                    Log.i("encontrou", "Encontrou uma peça");
-                    //pecasFundo.add(peca);
-                    //find = true;
-                    //cont = 0;
-                    return true;
-                }
+//                if ((((peca.getPoints().get(2)[0] + 2) == p.getPoints().get(2)[0]) &&
+//                        (peca.getPoints().get(2)[1]) == p.getPoints().get(2)[1]) || ((
+//                        peca.getPoints().get(3)[0] + 2) == p.getPoints().get(0)[0] &&
+//                        peca.getPoints().get(3)[0] == p.getPoints().get(3)[0])
+//                        ){
+//                    Log.i("encontrou", "Encontrou uma peça");
+//                    //pecasFundo.add(peca);
+//                    //find = true;
+//                    //cont = 0;
+//                    return true;
+//                }
+
+//                if(peca instanceof Quadrado){
+//                    if(peca.getPoints().get(0)[0]){
+//
+//                    }
+//                }
 
             }
         }
