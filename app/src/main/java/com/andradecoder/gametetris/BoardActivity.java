@@ -46,6 +46,7 @@ public class BoardActivity extends AppCompatActivity {
     int numeroDaPeca;
     int cont = 1;
     int valorThread;
+    int valorPecas;
 
     ArrayList<Piece> pecasFundo = new ArrayList<>();
 
@@ -57,7 +58,7 @@ public class BoardActivity extends AppCompatActivity {
 
         SharedPreferences config = getSharedPreferences("config", MODE_PRIVATE);
         int valorDificuldade = config.getInt("dificuldade", 2);
-        int valorPecas = config.getInt("numeroPecas", 4);
+        valorPecas = config.getInt("numeroPecas", 4);
 
         if (valorDificuldade == 1) {
             valorThread = 300;
@@ -66,6 +67,7 @@ public class BoardActivity extends AppCompatActivity {
         } else if (valorDificuldade == 3) {
             valorThread = 100;
         }
+
 
         Log.i("dificuldade", "" + valorThread);
         Log.i("pecas", "" + valorPecas);
@@ -244,7 +246,7 @@ public class BoardActivity extends AppCompatActivity {
         //Criando número random
         Random r = new Random();
         //Passar o valorPeças depois
-        int numberRandom = r.nextInt(3);
+        int numberRandom = r.nextInt(valorPecas);
         Log.i("random", "Número random: " + numberRandom);
         return 0;
     }
