@@ -59,16 +59,16 @@ public class BoardActivity extends AppCompatActivity {
         int valorDificuldade = config.getInt("dificuldade", 2);
         int valorPecas = config.getInt("numeroPecas", 4);
 
-        if(valorDificuldade == 1){
+        if (valorDificuldade == 1) {
             valorThread = 300;
-        }else if(valorDificuldade == 2){
+        } else if (valorDificuldade == 2) {
             valorThread = 150;
-        }else if(valorDificuldade == 3){
+        } else if (valorDificuldade == 3) {
             valorThread = 100;
         }
 
-        Log.i("dificuldade",""+valorThread);
-        Log.i("pecas",""+valorPecas);
+        Log.i("dificuldade", "" + valorThread);
+        Log.i("pecas", "" + valorPecas);
 
         pontos = (TextView) findViewById(R.id.pontos);
         imgv = (ImageView) findViewById(R.id.imageView);
@@ -246,7 +246,7 @@ public class BoardActivity extends AppCompatActivity {
         //Passar o valorPeças depois
         int numberRandom = r.nextInt(3);
         Log.i("random", "Número random: " + numberRandom);
-        return numberRandom;
+        return 0;
     }
 
 
@@ -310,11 +310,13 @@ public class BoardActivity extends AppCompatActivity {
 //                    return true;
 //                }
 
-//                if(peca instanceof Quadrado){
-//                    if(peca.getPoints().get(0)[0]){
-//
-//                    }
-//                }
+                if (peca instanceof Quadrado) {
+                    if((peca.getPoints().get(3)[0]+2 == p.getPoints().get(3)[0] && peca.getPoints().get(3)[1] == p.getPoints().get(3)[1]) ||
+                            peca.getPoints().get(2)[0] +2 == p.getPoints().get(2)[0] && peca.getPoints().get(2)[1] == p.getPoints().get(2)[1]){
+                        Log.i("encontrou", "Encontrou uma peça");
+                        return true;
+                    }
+                }
 
             }
         }
